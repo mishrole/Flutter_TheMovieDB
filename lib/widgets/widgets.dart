@@ -1,0 +1,1 @@
+export 'package:peliculasapp/widgets/card_swiper.dart';
