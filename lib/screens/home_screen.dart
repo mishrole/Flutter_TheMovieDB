@@ -19,11 +19,14 @@ class HomeScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: Column(
-        children: [
-            CardSwiper()
-        ],
-      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            CardSwiper(),
+            MovieSlider(),
+          ],
+        ),
+      )
       // body: Container(
       //   child: Center(
       //     child: Text('Home Screen'),
