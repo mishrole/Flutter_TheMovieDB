@@ -6,25 +6,27 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 class MoviesProvider extends ChangeNotifier {
 
   String _baseUrl = 'api.themoviedb.org';
-  String _lang = 'es-ES';
+  Map<String, dynamic> _query = {
+    'api_key': dotenv.env['THEMOVIEDB_APIKEY'], 
+    'language': 'es-ES', 
+    'page': '1'
+  };
 
   List<Movie> onDisplayMovies = [];
+  List<Movie> popularMovies = [];
 
   MoviesProvider() {
     print('MoviesProvider init');
 
     this.getOnDisplayMovies();
+    this.getPopularMovies();
   }
 
   getOnDisplayMovies() async {
     var url = Uri.https(
       _baseUrl, 
       '3/movie/now_playing', 
-      {
-        'api_key': dotenv.env['THEMOVIEDB_APIKEY'], 
-        'language': _lang, 
-        'page': '1'
-      }
+      _query
     );
 
     final response = await http.get(url);
@@ -35,5 +37,22 @@ class MoviesProvider extends ChangeNotifier {
     // Redibujar al hacer un cambio
     notifyListeners();
     // print(nowPlayingResponse.results[0].title);
+  }
+
+  getPopularMovies() async {
+    var url = Uri.https(
+      _baseUrl, 
+      '3/movie/popular', 
+      _query
+    );
+
+    final response = await http.get(url);
+    final popularResponse = PopularResponse.fromJson(response.body);
+    
+    popularMovies = [...popularMovies, ...popularResponse.results];
+
+    // Redibujar al hacer un cambio
+    print(popularMovies[0]);
+    notifyListeners();
   }
 }
