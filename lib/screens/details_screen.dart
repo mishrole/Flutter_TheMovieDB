@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:peliculasapp/widgets/widgets.dart';
 
 class DetailsScreen extends StatelessWidget {
   const DetailsScreen({Key? key}) : super(key: key);
@@ -6,8 +7,7 @@ class DetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // TODO: Cambiar por una instancia de movie
-    final String movie =
-        ModalRoute.of(context)?.settings.arguments.toString() ?? 'no-movie';
+    final String movie = ModalRoute.of(context)?.settings.arguments.toString() ?? 'no-movie';
 
     return Scaffold(
       // appBar: AppBar(
@@ -22,8 +22,16 @@ class DetailsScreen extends StatelessWidget {
         slivers: [
           _CustomAppBar(),
           SliverList(
-            delegate: SliverChildListDelegate([_PosterAndTitle()]),
+            delegate: SliverChildListDelegate([
+              _PosterAndTitle(),
+              _Overview(),
+              _Overview(),
+              _Overview(),
+              _Overview(),
+              CastingCards()
+            ]),
           ),
+          
         ],
       ),
     );
@@ -46,6 +54,7 @@ class _CustomAppBar extends StatelessWidget {
           color: Colors.black12,
           width: double.infinity,
           alignment: Alignment.bottomCenter,
+          padding: EdgeInsets.only(bottom: 10),
           child: Text(
             'movie.title',
             style: TextStyle(fontSize: 16),
@@ -112,6 +121,22 @@ class _PosterAndTitle extends StatelessWidget {
           )
         ],
       ),
+    );
+  }
+}
+
+class _Overview extends StatelessWidget {
+  const _Overview({ Key? key }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
+      child: Text(
+        'Párrafo random ejejjeje asjajsdhjahdas ajsdhjashdas ashdas hasjd aias sajdiasj dia siasasububd asjaasuda asudhasjd',
+        textAlign: TextAlign.justify, 
+        style: Theme.of(context).textTheme.subtitle1
+      ), 
     );
   }
 }
