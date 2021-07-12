@@ -1,14 +1,14 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:peliculasapp/models/now_playing_response.dart';
+import 'package:peliculasapp/models/models.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class MoviesProvider extends ChangeNotifier {
 
   String _baseUrl = 'api.themoviedb.org';
   String _lang = 'es-ES';
+
+  List<Movie> onDisplayMovies = [];
 
   MoviesProvider() {
     print('MoviesProvider init');
@@ -28,11 +28,12 @@ class MoviesProvider extends ChangeNotifier {
     );
 
     final response = await http.get(url);
-
     final nowPlayingResponse = NowPlayingResponse.fromJson(response.body);
+    
+    onDisplayMovies = nowPlayingResponse.results;
 
-    // final Map<String, dynamic> decodedData = json.decode(response.body);
-
-    print(nowPlayingResponse.results[0].title);
+    // Redibujar al hacer un cambio
+    notifyListeners();
+    // print(nowPlayingResponse.results[0].title);
   }
 }
