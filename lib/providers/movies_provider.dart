@@ -52,7 +52,6 @@ class MoviesProvider extends ChangeNotifier {
     popularMovies = [...popularMovies, ...popularResponse.results];
 
     // Redibujar al hacer un cambio
-    print(popularMovies[0]);
     notifyListeners();
   }
 }
