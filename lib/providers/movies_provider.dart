@@ -15,6 +15,8 @@ class MoviesProvider extends ChangeNotifier {
   List<Movie> onDisplayMovies = [];
   List<Movie> popularMovies = [];
 
+  int _popularPage = 0;
+
   MoviesProvider() {
     print('MoviesProvider init');
 
@@ -22,36 +24,37 @@ class MoviesProvider extends ChangeNotifier {
     this.getPopularMovies();
   }
 
-  getOnDisplayMovies() async {
-    var url = Uri.https(
-      _baseUrl, 
-      '3/movie/now_playing', 
-      _query
-    );
+  Future<String> _getJsonData( String endpoint, [int page = 1] ) async {
+    var url = Uri.https( _baseUrl, endpoint, {
+      'api_key': dotenv.env['THEMOVIEDB_APIKEY'], 
+      'language': 'es-ES', 
+      'page': '$page'
+    });
 
+    // Await the http get response, then decode the json-formatted response
     final response = await http.get(url);
-    final nowPlayingResponse = NowPlayingResponse.fromJson(response.body);
-    
+    return response.body;
+  }
+
+  getOnDisplayMovies() async {
+
+    final jsonData = await this._getJsonData('3/movie/now_playing');
+    final nowPlayingResponse = NowPlayingResponse.fromJson(jsonData);
+
     onDisplayMovies = nowPlayingResponse.results;
 
-    // Redibujar al hacer un cambio
     notifyListeners();
-    // print(nowPlayingResponse.results[0].title);
   }
 
   getPopularMovies() async {
-    var url = Uri.https(
-      _baseUrl, 
-      '3/movie/popular', 
-      _query
-    );
 
-    final response = await http.get(url);
-    final popularResponse = PopularResponse.fromJson(response.body);
-    
+    _popularPage++;
+
+    final jsonData = await this._getJsonData('3/movie/popular', _popularPage);
+    final popularResponse = PopularResponse.fromJson(jsonData);
+  
     popularMovies = [...popularMovies, ...popularResponse.results];
 
-    // Redibujar al hacer un cambio
     notifyListeners();
   }
 }
