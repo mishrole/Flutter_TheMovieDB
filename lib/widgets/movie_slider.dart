@@ -21,7 +21,7 @@ class MovieSlider extends StatelessWidget {
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 20.0),
             child: Text(
-              this.title ?? 'Populares',
+              this.title!,
               style: TextStyle(
                 fontSize: 20, 
                 fontWeight: FontWeight.bold
@@ -36,11 +36,7 @@ class MovieSlider extends StatelessWidget {
               scrollDirection: Axis.horizontal,
               itemCount: movies.length,
               /*itemBuilder: (BuildContext context, int index) { return _MoviePoster()}, */
-              itemBuilder: ( _ , int index) {
-                final movie = movies[index];
-
-                return _MoviePoster( movie: movie );
-              }
+              itemBuilder: ( _ , int index) => _MoviePoster(movie: movies[index]),
             ),
           ),
         ],
